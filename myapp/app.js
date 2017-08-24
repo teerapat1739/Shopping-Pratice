@@ -11,6 +11,20 @@ var users = require('./routes/users');
 
 var app = express();
 
+
+var mongoose = require('mongoose');
+//connect Db
+mongoose.Promise = require('bluebird');
+mongoose.connect('mongodb://localhost/shoppingcart')
+    .then(() => { // if all is ok we will be here
+      console.log('Start');
+    })
+    .catch(err => { // if error we will be here
+        console.error('App starting error:', err.stack);
+        process.exit(1);
+    });
+
+
 // view engine setup
 app.engine('.hbs', exphbs({defaultLayout: 'layout',extname: '.hbs'}));
 app.set('view engine', '.hbs');
