@@ -5,12 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
-
+var routes = require('./routes/index');
+var usersRoutes = require('./routes/users');
+var session = require('express-session');
+var passport = require('passport');
+var flash = require('connect-flash');
+var validator = require('express-validator');
+var MongoStore = require('connect-mongo')(session);
 var app = express();
-
 
 var Product = require('./models/product');
 var mongoose = require('mongoose');
@@ -36,6 +38,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'mysupersecret',resave: false,saveUninitialized: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
