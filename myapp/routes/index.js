@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Product =require('../models/product');
+var csrf = require('csurf');
+var passport = require('passport');
+
+
+var csrfProtection = csrf();
+router.use(csrfProtection);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,7 +20,7 @@ router.get('/', function(req, res, next) {
 
   });
 });
-router.get('/user/signup',function(req, res, next){
+router.get('/signup',function(req, res, next){
   res.render('user/signup',{csrfToken: req.csrfToken()});
 });
 router.post('/user/signup',function(req,res,next){
