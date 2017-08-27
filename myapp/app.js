@@ -42,7 +42,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
-app.use(session({secret: 'mysupersecret',resave: false,saveUninitialized: false}));
+//ฝัง session,cookies ไว้ใน db  โดย เรียก var MongoStore = require('connect-mongo')(session);
+app.use(session({
+    secret: 'mysupersecret',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
