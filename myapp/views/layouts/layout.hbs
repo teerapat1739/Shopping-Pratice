@@ -10,9 +10,8 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <div class="container">
-          {{> header}}
-    </div>
+    {{> header}}
+    <!-- ย้ายตำแหน่ง jquery.min.js ไปบน div>> body เพราะมันจะทำให้เกิดการเรียกซ้ำระหว่าง js ที่ อยู่ใน checkout.hbs กับ มัน  -->
     <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
