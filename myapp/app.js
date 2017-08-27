@@ -5,17 +5,20 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
-var routes = require('./routes/index');
-var usersRoutes = require('./routes/users');
 var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var validator = require('express-validator');
 var MongoStore = require('connect-mongo')(session);
+var routes = require('./routes/index');
+var usersRoutes = require('./routes/users');
 var app = express();
 
 var Product = require('./models/product');
 var mongoose = require('mongoose');
+//config errors >> Unknown authentication strategy "local.signup"
+require('./config/passport');
+
 
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/shopping3')

@@ -6,6 +6,10 @@ var passport = require('passport');
 var csrfProtection = csrf();
 router.use(csrfProtection);
 
+router.get('/profile',  function (req, res, next) {
+    res.render('user/profile');
+});
+
 router.get('/signup', function (req, res, next) {
     var messages = req.flash('error');
     res.render('user/signup', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});
