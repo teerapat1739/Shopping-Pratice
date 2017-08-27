@@ -3,6 +3,7 @@ var router = express.Router();
 var Product =require('../models/product');
 var csrf = require('csurf');
 var passport = require('passport');
+var Cart = require('../models/cart');
 
 
 var csrfProtection = csrf();
@@ -20,5 +21,20 @@ router.get('/', function(req, res, next) {
 
   });
 });
+//โดยจะเก็บค่าต่างๆไว้ใน session เช่น จำนวนสินค้า ราคา จะเก็บจนกว่าจะสิ้นสุดsession หรือ ถูกทำลาย
 
+router.get('/add-to-cart/:id',function(req, res,next ){
+      var productId = req.params.id;
+      var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+      Product.findById(productId,function(err, product){
+        if(err) {
+            return res.redirect('/');
+        }
+        cart.add(product, product.id);
+        req.session.cart = cart;
+        console.log(req.session.cart);
+        res.redirect('/');
+      });
+});
 module.exports = router;
