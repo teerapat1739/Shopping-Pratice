@@ -1,40 +1,42 @@
-var express = require('express');
-var router = express.Router();
-var Product =require('../models/product');
-var csrf = require('csurf');
-var passport = require('passport');
-var Cart = require('../models/cart');
-
-
-var csrfProtection = csrf();
-router.use(csrfProtection);
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  Product.find(function(err, docs){
-    //var productChunks=[];
-  //  var chunkSize=3;
-  //  for(var i; i<docs.length; i+=chunkSize){
-    //  productChunks.push(docs.slice(i, i+chunkSize));
-  // }
-      res.render('shop/index', { title: 'Shopping cart', products: docs });// successMsg ถูกนำไป render ที่ index.hbs
-
-  });
-});
-//โดยจะเก็บค่าต่างๆไว้ใน session เช่น จำนวนสินค้า ราคา จะเก็บจนกว่าจะสิ้นสุดsession หรือ ถูกทำลาย
-
-router.get('/add-to-cart/:id',function(req, res,next ){
-      var productId = req.params.id;
-      var cart = new Cart(req.session.cart ? req.session.cart : {});
-
-      Product.findById(productId,function(err, product){
-        if(err) {
-            return res.redirect('/');
-        }
-        cart.add(product, product.id);
-        req.session.cart = cart;
-        console.log(req.session.cart);
-        res.redirect('/');
-      });
-});
-module.exports = router;
+{{# if this.products }}
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+            <ul class="list-group">
+                {{#each products}}
+                    <li class="list-group-item">
+                        <span class="badge">{{this.qty}}</span>
+                        <span style="font-weight: bold">{{this.item.title}}</span>
+                        <span class="label label-success">${{this.price}}</span>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Reduce by 1</a></li>
+                                <li><a href="#">Remove All</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
+            <strong>Total: {{totalPrice}}</strong>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
+            <button type="button" class="btn btn-success">Checkout</button>
+        </div>
+    </div>
+    {{ else }}
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
+            <h2>No Items in Cart yet!</h2>
+        </div>
+    </div>
+{{/if}}
