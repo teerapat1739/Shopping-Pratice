@@ -48,6 +48,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Config ตัวแปร >> res.locals.login = req.isAuthenticated(); ใน app.js และแก้ไขการเข้าถึงแถบเมนูของผู้ที่login กับไม่ login
+app.use(function(req, res, next) {
+    res.locals.login = req.isAuthenticated();
+    next();
+});
+
 app.use('/user', usersRoutes);
 app.use('/', routes);
 
